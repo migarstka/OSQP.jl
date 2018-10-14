@@ -115,6 +115,23 @@ function defaultoptimizer()
     optimizer
 end
 
+@testset "CachingOptimizer: unit" begin
+    excludes = [# Quadratic constraints are not supported
+                "solve_qcp_edge_cases",
+                # Will be fixed in https://github.com/JuliaOpt/MathOptInterface.jl/pull/537
+                "solve_blank_obj",
+                # FIXME KeyError: key CartesianIndex(1, 2) not found
+                "Duplicate off-diagonal terms",
+                # ConstraintPrimal not supported
+                "solve_affine_deletion_edge_cases",
+                # Integer and ZeroOne sets are not supported
+                "solve_integer_edge_cases", "solve_objbound_edge_cases"]
+
+    optimizer = defaultoptimizer()
+    MOIT.unittest(MOIU.CachingOptimizer(OSQPModel{Float64}(), optimizer),
+                  config, excludes)
+end
+
 @testset "CachingOptimizer: linear problems" begin
     excludes = if Int == Int32
         ["linear7"] # https://github.com/JuliaOpt/MathOptInterface.jl/issues/377#issuecomment-394912761
