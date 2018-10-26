@@ -118,8 +118,6 @@ end
 @testset "CachingOptimizer: unit" begin
     excludes = [# Quadratic constraints are not supported
                 "solve_qcp_edge_cases",
-                # Will be fixed in https://github.com/JuliaOpt/MathOptInterface.jl/pull/537
-                "solve_blank_obj",
                 # FIXME KeyError: key CartesianIndex(1, 2) not found
                 "Duplicate off-diagonal terms",
                 # ConstraintPrimal not supported
